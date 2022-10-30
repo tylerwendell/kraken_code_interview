@@ -1,2 +1,1 @@
-# Kraken the Interview
-# kraken_code_interview
+# Kraken The Interview
