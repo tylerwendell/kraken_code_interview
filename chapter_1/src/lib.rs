@@ -38,39 +38,35 @@ fn is_unique(s: String) -> bool {
 // // perform basic string compression. aaabbc -> a3b2c1
 fn string_compression(s: String) -> String {
     let mut comp = String::from("");
-    let mut current= '\0';
+    let mut current= '\0'; // null char
     let mut count = 1;
 
-    for (pos, c) in s.chars().enumerate() {
+    for c in s.chars() {
         if pos == 0 { //prime the pump
             current = c;
             continue;
         }
-        print!("comp: {}; Current: {}; Count: {}\n",  comp,current,count);
         if  current != c {
-            print!("Here 1\n");
             if count <= 1 {
-                print!("Here 2\n");
                 comp = format!("{}{}", comp,current);
             } else  {
-                print!("Here 3\n");
                 comp = format!("{}{}{}", comp,current,count);
             }
             count =1;
             current = c;
         } else {
-            print!("Here 4\n");
             count +=1;
         }
     }
     print!("comp: {}; Current: {}; Count: {}\n",  comp,current,count);
-    if count != 1{
+    // We have to capture the last char in the string. 
+    if count != 1{ // if the count of the last char is equal to 1 we need to print the count
         comp = format!("{}{}{}", comp,current,count);
-    } else {
+    } else { // dont print a "1" count to preserve space
         comp = format!("{}{}", comp,current);
     }
     
-    if comp.len() >= s.len() {
+    if comp.len() >= s.len() { // if the compression didnt compress just use original string
         return s
     } else {
         return comp
