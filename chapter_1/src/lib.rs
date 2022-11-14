@@ -41,7 +41,7 @@ fn string_compression(s: String) -> String {
     let mut current= '\0'; // null char
     let mut count = 1;
 
-    for c in s.chars() {
+    for (pos, c) in s.chars().enumerate() {
         if pos == 0 { //prime the pump
             current = c;
             continue;
