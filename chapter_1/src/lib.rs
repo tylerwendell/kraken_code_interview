@@ -19,7 +19,8 @@ fn is_unique(s: String) -> bool {
 
 // }
 
-// // Replaces all spaces with '%20'
+// Replaces all spaces with '%20'
+//This is a lot closer to what rust can do according to the original requirements in the problem
 fn urlify(s: &mut String) {
     const SPACE_REPLACEMENT: &[u8] = b"%20";
 
@@ -48,6 +49,11 @@ fn urlify(s: &mut String) {
     }
 
     *s = String::from_utf8(buffer).expect("invalid UTF-8 during URL-ification");
+}
+
+//Probably wouldnt consider this as a replace in place
+fn urlify2(s: &mut String) {
+    *s = s.replace(" ", "%20")
 }
 
 // //determine if a string is permutation of a palindrome

@@ -107,7 +107,7 @@ mod tests {
         for test in tests{
             // println!("With input: {}", test.param1);
             print!("Before: {}", test.param1);
-            urlify(test.param1);
+            urlify2(test.param1);
             print!("After: {}", test.param1);
             // println!("I got the value {}", actual);
             // println!("What I expected: {}", test.expected);
