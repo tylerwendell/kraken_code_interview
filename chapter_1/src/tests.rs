@@ -89,6 +89,33 @@ mod tests {
     }
 
     #[test]
+    fn test_urlify() {
+        struct TestData<'a> {
+            param1: &'a mut String,
+            expected: &'a mut String,
+        }
+
+        let tests = [TestData{
+            param1: &mut String::from("This Test"),
+            expected: &mut String::from("This%20Test"),
+        },
+        TestData{
+            param1: &mut String::from("This is a Test. Please try this... "),
+            expected: &mut String::from("This%20is%20a%20Test.%20Please%20try%20this...%20"),
+        },
+        ];
+        for test in tests{
+            // println!("With input: {}", test.param1);
+            print!("Before: {}", test.param1);
+            urlify(test.param1);
+            print!("After: {}", test.param1);
+            // println!("I got the value {}", actual);
+            // println!("What I expected: {}", test.expected);
+            assert_eq!(test.param1, test.expected);
+        }
+    }
+
+    #[test]
     fn test_string_rotation() {
         struct TestData {
             param1: String,

@@ -4,13 +4,13 @@ use std::collections::HashMap;
 fn is_unique(s: String) -> bool {
     let mut chars:HashMap<char,bool> = HashMap::new();
     for c in s.chars() {
-        if chars.contains_key(&c) {
-            return false;
+        if let std::collections::hash_map::Entry::Vacant(e) = chars.entry(c) {
+            e.insert(true);
         } else {
-            chars.insert(c, true);
+            return false;
         };
     };
-    return true;
+    true
 }
 
 
@@ -20,9 +20,35 @@ fn is_unique(s: String) -> bool {
 // }
 
 // // Replaces all spaces with '%20'
-// fn URLify(s: &String) {
+fn urlify(s: &mut String) {
+    const SPACE_REPLACEMENT: &[u8] = b"%20";
 
-// }
+    let mut buffer = std::mem::take(s).into_bytes();
+    let old_len = buffer.len();
+
+    // Get new size for string. This will be the size of the new string plus the size of the (SPACE_REPLACEMENT-1)*num_spaces
+    let space_count = buffer.iter().filter(|&&byte| byte == b' ').count();
+    let new_len = buffer.len() + (SPACE_REPLACEMENT.len() - 1) * space_count;
+    buffer.resize(new_len, b'\0');
+
+    let mut write_pos = new_len;
+
+    //Do this backwards to account for the larger size required for the SPACE_REPLACEMENT
+    for read_pos in (0..old_len).rev() {
+        let byte = buffer[read_pos];
+
+        if byte == b' ' {
+            write_pos -= SPACE_REPLACEMENT.len();
+            buffer[write_pos..write_pos + SPACE_REPLACEMENT.len()]
+                .copy_from_slice(SPACE_REPLACEMENT);
+        } else {
+            write_pos -= 1;
+            buffer[write_pos] = byte;
+        }
+    }
+
+    *s = String::from_utf8(buffer).expect("invalid UTF-8 during URL-ification");
+}
 
 // //determine if a string is permutation of a palindrome
 // fn palindromePermutation(s: String) -> bool { 
@@ -58,7 +84,7 @@ fn string_compression(s: String) -> String {
             count +=1;
         }
     }
-    print!("comp: {}; Current: {}; Count: {}\n",  comp,current,count);
+    println!("comp: {}; Current: {}; Count: {}",  comp,current,count);
     // We have to capture the last char in the string. 
     if count != 1{ // if the count of the last char is equal to 1 we need to print the count
         comp = format!("{}{}{}", comp,current,count);
@@ -67,9 +93,9 @@ fn string_compression(s: String) -> String {
     }
     
     if comp.len() >= s.len() { // if the compression didnt compress just use original string
-        return s
+        s
     } else {
-        return comp
+        comp
     }
     
 }
@@ -92,7 +118,7 @@ fn string_rotation(s1: String, s2: String) -> bool {
         return false
     }
     let doubles = format!("{}{}", s1, s1);
-    return doubles.contains(&s2);
+    doubles.contains(&s2)
 }
 
 #[cfg(test)]
