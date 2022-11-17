@@ -15,9 +15,18 @@ fn is_unique(s: String) -> bool {
 
 
 // //determines if two strings are permutations of each other
-// fn checkPermutation(s1: String, s2: String) -> bool {
-
-// }
+fn check_permutation(s1: String, s2: String) -> bool {
+    let s1_clone = s1.clone();
+    let s2_clone = s2.clone();
+    for c in s1.chars() {
+        if s1_clone.is_empty() || s2_clone.is_empty() {
+            break
+        }
+        s1_clone.replace_first(c, "");
+        s2_clone.replace_first(c,"")
+    }
+    s1_clone.is_empty() && s2_clone.is_empty()
+}
 
 // Replaces all spaces with '%20'
 //This is a lot closer to what rust can do according to the original requirements in the problem
@@ -63,7 +72,7 @@ fn urlify2(s: &mut String) {
 
 // //Given the following operations: insert, remove, or replace
 // //determine if the two strings are one or less operating away from each other
-// fn OneAway(s1: String, s2: String) -> bool {
+// fn one_away(s1: String, s2: String) -> bool {
 
 // }
 

@@ -167,4 +167,61 @@ mod tests {
             assert_eq!(actual, test.expected);
         }
     }
+
+    #[test]
+    fn test_check_permutation() {
+        struct TestData {
+            param1: String,
+            param2: String,
+            expected: bool,
+        }
+
+        let tests = [TestData{
+            param1: String::from("waterbottle"),
+            param2: shuffle_string("waterbottle"),
+            expected: true,
+        },
+        TestData{
+            param1: String::from(""),
+            param2: String::from(""),
+            expected: true,
+        },
+        TestData{
+            param1: String::from("a"),
+            param2: String::from("b"),
+            expected: false,
+        },
+        TestData{
+            param1: String::from("aa"),
+            param2: String::from("a"),
+            expected: false,
+        },
+        TestData{
+            param1: String::from("a"),
+            param2: String::from("aa"),
+            expected: false,
+        },
+        TestData{
+            param1: String::from(r#" "!#$%&'()*+,-/0123456789:;<=>?@\^_AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz{|}~"#),
+            param2: shuffle_string(r#" "!#$%&'()*+,-/0123456789:;<=>?@\^_AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz{|}~"#),
+            expected: true,
+        }
+        ];
+        for test in tests{
+            // println!("With input: {}", test.param1);
+            let actual = check_permutation(test.param1, test.param2);
+            // println!("I got the value {}", actual);
+            // println!("What I expected: {}", test.expected);
+            assert_eq!(actual, test.expected);
+        }
+    }
+}
+
+fn shuffle_string(s: String) -> String {
+    use rand::seq::SliceRandom;
+
+    let mut rng = rand::thread_rng();
+    let mut bytes = s.to_string().into_bytes();
+    bytes.shuffle(&mut rng);
+    let str = String::from_utf8(bytes).unwrap();
 }
