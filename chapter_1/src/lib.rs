@@ -16,15 +16,16 @@ fn is_unique(s: String) -> bool {
 
 // //determines if two strings are permutations of each other
 fn check_permutation(s1: String, s2: String) -> bool {
-    let s1_clone = s1.clone();
-    let s2_clone = s2.clone();
+    let mut s1_clone = s1.clone();
+    let mut s2_clone = s2.clone();
     for c in s1.chars() {
         if s1_clone.is_empty() || s2_clone.is_empty() {
             break
         }
-        s1_clone.replace_first(c, "");
-        s2_clone.replace_first(c,"")
+        s1_clone = s1_clone.replacen(c, "",1);
+        s2_clone=s2_clone.replacen(c,"",1);
     }
+
     s1_clone.is_empty() && s2_clone.is_empty()
 }
 
@@ -66,9 +67,28 @@ fn urlify2(s: &mut String) {
 }
 
 // //determine if a string is permutation of a palindrome
-// fn palindromePermutation(s: String) -> bool { 
+fn palindrome_permutation(mut s: String) -> bool {
+    s = s.replace(" ", "");
+    let char_count: HashMap<char, i32> = 
+        s.to_lowercase()
+        .chars()
+        .fold(HashMap::new(), |mut map, c| {
+            *map.entry(c).or_insert(0) += 1;
+            map
+        });
+    let mut has_odd: bool = false;
 
-// }
+    for (_k, v) in char_count.iter() {
+
+        if (v % 2) != 0 {
+            if has_odd {
+                return false;
+            }
+            has_odd = true;
+        }
+    }
+    return true;
+}
 
 // //Given the following operations: insert, remove, or replace
 // //determine if the two strings are one or less operating away from each other

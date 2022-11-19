@@ -107,7 +107,7 @@ mod tests {
         for test in tests{
             // println!("With input: {}", test.param1);
             print!("Before: {}", test.param1);
-            urlify2(test.param1);
+            urlify(test.param1);
             print!("After: {}", test.param1);
             // println!("I got the value {}", actual);
             // println!("What I expected: {}", test.expected);
@@ -178,7 +178,7 @@ mod tests {
 
         let tests = [TestData{
             param1: String::from("waterbottle"),
-            param2: shuffle_string("waterbottle"),
+            param2: shuffle_string(String::from("waterbottle")),
             expected: true,
         },
         TestData{
@@ -203,15 +203,54 @@ mod tests {
         },
         TestData{
             param1: String::from(r#" "!#$%&'()*+,-/0123456789:;<=>?@\^_AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz{|}~"#),
-            param2: shuffle_string(r#" "!#$%&'()*+,-/0123456789:;<=>?@\^_AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz{|}~"#),
+            param2: shuffle_string(String::from(r#" "!#$%&'()*+,-/0123456789:;<=>?@\^_AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz{|}~"#)),
             expected: true,
         }
         ];
         for test in tests{
-            // println!("With input: {}", test.param1);
+            println!("With input: {}", test.param2);
             let actual = check_permutation(test.param1, test.param2);
             // println!("I got the value {}", actual);
             // println!("What I expected: {}", test.expected);
+            assert_eq!(actual, test.expected);
+        }
+    }
+
+    #[test]
+    fn test_palindrome_permutation() {
+        struct TestData {
+            param1: String,
+            expected: bool,
+        }
+
+        let tests = [
+            TestData{
+            param1: String::from("T Eliot top bard notes putrid tang emanating is sad Id assign it a name gnat dirt upset on drab pot toilet"),
+            expected: true,
+        },
+        TestData{
+            param1: String::from(""),
+            expected: true,
+        },
+        TestData{
+            param1: String::from("aa"),
+            expected: true,
+        },
+        TestData{
+            param1: String::from("a"),
+            expected: true,
+        },
+        TestData{
+            param1: String::from("abacdaba"),
+            expected: false,
+        },
+        TestData{
+            param1: String::from("abbu6yh5tg4"),
+            expected: false,
+        },
+        ];
+        for test in tests{
+            let actual = palindrome_permutation(shuffle_string(test.param1));
             assert_eq!(actual, test.expected);
         }
     }
@@ -224,4 +263,5 @@ fn shuffle_string(s: String) -> String {
     let mut bytes = s.to_string().into_bytes();
     bytes.shuffle(&mut rng);
     let str = String::from_utf8(bytes).unwrap();
+    return str
 }
